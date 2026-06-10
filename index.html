@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research: Security in Meru E-Commerce</title>
+    <title>Meru Marketplace - Buy & Sell</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -11,18 +11,25 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1e40af', // blue-800
-                        secondary: '#0f172a', // slate-900
-                        accent: '#3b82f6', // blue-500
+                        primary: '#1e40af',
+                        secondary: '#0f172a',
+                        accent: '#3b82f6',
                     }
                 }
             }
         }
     </script>
     <style>
-        .stat-card:hover {
-            transform: translateY(-5px);
+        .product-card:hover {
+            transform: translateY(-8px);
             transition: all 0.3s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -34,22 +41,25 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center gap-2">
                     <div class="bg-primary p-2 rounded-lg">
-                        <i class="fas fa-shield-alt text-white"></i>
+                        <i class="fas fa-store text-white"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-tight hidden md:block">SecurityResearch.ke</span>
+                    <span class="font-bold text-xl tracking-tight hidden md:block">Meru Marketplace</span>
                 </div>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8">
-                    <a href="#abstract" class="text-slate-600 hover:text-primary font-medium transition">Abstract</a>
-                    <a href="#methodology" class="text-slate-600 hover:text-primary font-medium transition">Methodology</a>
-                    <a href="#findings" class="text-slate-600 hover:text-primary font-medium transition">Findings</a>
-                    <a href="#recommendations" class="text-slate-600 hover:text-primary font-medium transition">Recommendations</a>
-                    <a href="#resources" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Resources</a>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-slate-600 hover:text-primary font-medium transition">Home</a>
+                    <a href="#products" class="text-slate-600 hover:text-primary font-medium transition">Shop</a>
+                    <a href="#sell" class="text-slate-600 hover:text-primary font-medium transition">Sell</a>
+                    <a href="#about" class="text-slate-600 hover:text-primary font-medium transition">About</a>
+                    <button onclick="openModal('loginModal')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="md:hidden">
+                <div class="md:hidden flex items-center gap-4">
+                    <button onclick="openModal('loginModal')" class="text-primary hover:text-blue-700 font-bold">
+                        <i class="fas fa-user text-xl"></i>
+                    </button>
                     <button id="mobile-menu-button" class="text-slate-600 hover:text-primary focus:outline-none">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
@@ -60,308 +70,355 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#abstract" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Abstract</a>
-                <a href="#methodology" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Methodology</a>
-                <a href="#findings" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Findings</a>
-                <a href="#recommendations" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Recommendations</a>
-                <a href="#resources" class="block px-3 py-2 text-primary font-bold">Resources</a>
+                <a href="#home" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Home</a>
+                <a href="#products" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Shop</a>
+                <a href="#sell" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Sell</a>
+                <a href="#about" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">About</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="pt-32 pb-20 bg-gradient-to-br from-slate-900 via-slate-800 to-primary text-white">
+    <header id="home" class="pt-32 pb-20 bg-gradient-to-br from-slate-900 via-slate-800 to-primary text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
-                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-blue-500/30 uppercase tracking-wider">Research Study</span>
+                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-blue-500/30 uppercase tracking-wider">Welcome to</span>
                 <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                    Factors Hindering Implementation of Security Measures on Online E-Commerce Systems in Meru County
+                    Meru Marketplace
                 </h1>
                 <p class="text-xl text-slate-300 mb-10 leading-relaxed">
-                    Analyzing the intersection of technological barriers, economic constraints, and user behavior in Kenya's emerging digital marketplace.
+                    Your trusted platform to buy and sell quality products locally. Support local businesses and find amazing deals!
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#findings" class="bg-white text-slate-900 px-8 py-3 rounded-lg font-bold hover:bg-slate-100 transition flex items-center justify-center gap-2">
-                        View Dashboard <i class="fas fa-chart-pie"></i>
+                    <a href="#products" class="bg-white text-slate-900 px-8 py-3 rounded-lg font-bold hover:bg-slate-100 transition flex items-center justify-center gap-2">
+                        Start Shopping <i class="fas fa-shopping-bag"></i>
                     </a>
-                    <a href="#resources" class="border border-white/30 bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-lg font-bold hover:bg-white/20 transition flex items-center justify-center gap-2">
-                        Download Full Report <i class="fas fa-download"></i>
+                    <a href="#sell" class="border border-white/30 bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-lg font-bold hover:bg-white/20 transition flex items-center justify-center gap-2">
+                        Start Selling <i class="fas fa-store"></i>
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Abstract Section -->
-    <section id="abstract" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Abstract</h2>
-                    <div class="space-y-4 text-slate-600 text-lg">
-                        <p>
-                            As e-commerce continues to grow in Meru County, the vulnerability of these systems becomes a critical concern. This research explores the significant obstacles that prevent businesses from adopting robust security frameworks.
-                        </p>
-                        <p>
-                            The study identifies a multi-faceted challenge including high costs of implementation, lack of technical expertise among SME owners, and a general lack of awareness regarding cybersecurity threats.
-                        </p>
-                        <div class="flex gap-4 pt-4">
-                            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-                                <i class="fas fa-check-circle"></i> SME Focus
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-                                <i class="fas fa-check-circle"></i> Security Audits
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-                                <i class="fas fa-check-circle"></i> Policy Framework
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-slate-100 rounded-2xl p-8 border border-slate-200 shadow-inner">
-                    <div class="flex items-start gap-4 mb-6">
-                        <div class="bg-primary/10 p-3 rounded-lg text-primary">
-                            <i class="fas fa-quote-left text-2xl"></i>
-                        </div>
-                        <p class="italic text-slate-700">
-                            "The digital economy in Meru is thriving, yet the underlying security infrastructure remains fragile due to systemic constraints that this study aims to address."
-                        </p>
-                    </div>
-                    <hr class="border-slate-200 my-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-slate-300 rounded-full"></div>
-                        <div>
-                            <p class="font-bold text-slate-900">Lead Researcher</p>
-                            <p class="text-sm text-slate-500">Department of Computer Science</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Methodology -->
-    <section id="methodology" class="py-24 bg-slate-50">
+    <!-- Featured Products Section -->
+    <section id="products" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl font-bold mb-4">Research Methodology</h2>
-                <p class="text-slate-600">A rigorous approach was taken to ensure data accuracy and representative findings across Meru County.</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Featured Products</h2>
+                <p class="text-slate-600 text-lg">Discover amazing products from local sellers in Meru</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-users"></i>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product Card 1 -->
+                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 h-48 flex items-center justify-center text-white text-4xl">
+                        <i class="fas fa-apple-alt"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-3">Target Population</h3>
-                    <p class="text-slate-600">E-commerce platform owners, IT administrators, and online consumers within Meru County's major urban centers.</p>
-                </div>
-                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-3">Data Collection</h3>
-                    <p class="text-slate-600">Mixed-method approach utilizing structured questionnaires, semi-structured interviews, and direct system observations.</p>
-                </div>
-                <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-6 text-xl">
-                        <i class="fas fa-microscope"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-3">Analysis Tools</h3>
-                    <p class="text-slate-600">Quantitative data analyzed via SPSS, while qualitative insights were coded using thematic analysis techniques.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Dashboard (Findings) -->
-    <section id="findings" class="py-24 bg-secondary text-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                <div class="max-w-2xl">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Research Dashboard</h2>
-                    <p class="text-slate-400">Key statistical indicators highlighting the critical challenges identified during the study.</p>
-                </div>
-                <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 px-4 py-2 rounded-lg text-sm text-slate-300">
-                    <i class="fas fa-sync-alt fa-spin mr-2 text-accent"></i> Live Data Visualization
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Response Rate -->
-                <div class="stat-card bg-slate-800/40 p-8 rounded-2xl border border-slate-700 flex flex-col items-center text-center">
-                    <div class="relative w-40 h-40 mb-6">
-                        <svg class="w-full h-full transform -rotate-90">
-                            <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-700" />
-                            <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-accent" stroke-dasharray="440" stroke-dashoffset="48" stroke-linecap="round" />
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-4xl font-black">89%</span>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Fresh Fruits</h3>
+                        <p class="text-slate-600 text-sm mb-3">Organic farm-fresh fruits</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-bold text-primary">KES 500</span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.8</span>
                         </div>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Response Rate</h3>
-                    <p class="text-slate-400 text-sm">High engagement from the sampled participants indicates the relevance of security concerns.</p>
-                </div>
-
-                <!-- Cost Barrier -->
-                <div class="stat-card bg-slate-800/40 p-8 rounded-2xl border border-slate-700">
-                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
-                        <i class="fas fa-money-bill-wave text-green-400"></i> Cost Barrier
-                    </h3>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between mb-2 text-sm">
-                                <span>High Implementation Costs</span>
-                                <span class="text-accent font-bold">75%</span>
-                            </div>
-                            <div class="w-full bg-slate-700 rounded-full h-4">
-                                <div class="bg-accent h-4 rounded-full transition-all duration-1000" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <p class="text-slate-400 text-sm">Participants cited the high price of SSL certificates, firewall maintenance, and expert consultancy as primary hindrances.</p>
+                        <button onclick="alert('Added to cart!')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
                     </div>
                 </div>
 
-                <!-- Weak Passwords -->
-                <div class="stat-card bg-slate-800/40 p-8 rounded-2xl border border-slate-700">
-                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
-                        <i class="fas fa-key text-yellow-400"></i> Vulnerability Data
-                    </h3>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between mb-2 text-sm">
-                                <span>Weak Password Usage</span>
-                                <span class="text-accent font-bold">80%</span>
-                            </div>
-                            <div class="w-full bg-slate-700 rounded-full h-4">
-                                <div class="bg-red-500 h-4 rounded-full transition-all duration-1000" style="width: 80%"></div>
-                            </div>
+                <!-- Product Card 2 -->
+                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-gradient-to-br from-green-400 to-green-600 h-48 flex items-center justify-center text-white text-4xl">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Vegetables</h3>
+                        <p class="text-slate-600 text-sm mb-3">Fresh vegetables daily</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-bold text-primary">KES 300</span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.7</span>
                         </div>
-                        <p class="text-slate-400 text-sm">A startling majority of platforms lacked enforced password complexity, leaving them open to brute-force attacks.</p>
+                        <button onclick="alert('Added to cart!')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-gradient-to-br from-orange-400 to-orange-600 h-48 flex items-center justify-center text-white text-4xl">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Baked Goods</h3>
+                        <p class="text-slate-600 text-sm mb-3">Homemade bakery items</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-bold text-primary">KES 200</span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                        <button onclick="alert('Added to cart!')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 h-48 flex items-center justify-center text-white text-4xl">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Handcrafts</h3>
+                        <p class="text-slate-600 text-sm mb-3">Local artisan products</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-bold text-primary">KES 1,500</span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i> 5.0</span>
+                        </div>
+                        <button onclick="alert('Added to cart!')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Recommendations -->
-    <section id="recommendations" class="py-24 bg-white">
+    <!-- Selling Section -->
+    <section id="sell" class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center">Strategic Recommendations</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="flex gap-6 p-6 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
-                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">Technical Training</h3>
-                        <p class="text-slate-600">Subsidized workshops for SME owners to build foundational cybersecurity skills and system maintenance knowledge.</p>
-                    </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Start Selling Today</h2>
+                    <p class="text-slate-600 text-lg mb-6">
+                        Join thousands of sellers in Meru Marketplace. Reach more customers and grow your business.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-slate-700">Easy product listing</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-slate-700">Secure payment processing</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-slate-700">Free store analytics</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            <span class="text-slate-700">24/7 customer support</span>
+                        </li>
+                    </ul>
+                    <button onclick="openModal('signupModal')" class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition flex items-center gap-2">
+                        Create Seller Account <i class="fas fa-arrow-right"></i>
+                    </button>
                 </div>
-                <div class="flex gap-6 p-6 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
-                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">Policy Enforcement</h3>
-                        <p class="text-slate-600">The Meru County government should implement local digital trade policies that mandate basic security audits for e-commerce licenses.</p>
-                    </div>
-                </div>
-                <div class="flex gap-6 p-6 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
-                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">Cloud-Based Solutions</h3>
-                        <p class="text-slate-600">Encouraging the transition to reputable cloud hosting providers that offer built-in security features at competitive rates.</p>
-                    </div>
-                </div>
-                <div class="flex gap-6 p-6 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
-                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">User Education</h3>
-                        <p class="text-slate-600">Continuous awareness campaigns for consumers on the importance of strong passwords and recognizing phishing attempts.</p>
+                <div class="bg-gradient-to-br from-primary to-blue-600 rounded-2xl p-8 text-white shadow-xl">
+                    <h3 class="text-2xl font-bold mb-6">Why Choose Us?</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white/20 backdrop-blur-sm p-4 rounded-lg">
+                            <h4 class="font-bold mb-2 flex items-center gap-2"><i class="fas fa-users"></i> Reach Local Customers</h4>
+                            <p class="text-blue-100 text-sm">Connect with thousands of buyers in your area</p>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur-sm p-4 rounded-lg">
+                            <h4 class="font-bold mb-2 flex items-center gap-2"><i class="fas fa-shield-alt"></i> Safe Transactions</h4>
+                            <p class="text-blue-100 text-sm">Buyer and seller protection guaranteed</p>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur-sm p-4 rounded-lg">
+                            <h4 class="font-bold mb-2 flex items-center gap-2"><i class="fas fa-chart-line"></i> Grow Your Sales</h4>
+                            <p class="text-blue-100 text-sm">Track metrics and optimize your store</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Resources Section -->
-    <section id="resources" class="py-24 bg-slate-900 text-white">
+    <!-- Stats Section -->
+    <section class="py-16 bg-primary text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-primary to-blue-600 rounded-3xl p-8 md:p-16 shadow-2xl relative overflow-hidden">
-                <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h2 class="text-3xl md:text-4xl font-bold mb-6">Downloadable Resources</h2>
-                        <p class="text-blue-100 text-lg mb-8">Access the full research methodology, survey instruments, and detailed statistical analysis reports.</p>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="#" class="bg-white text-primary px-6 py-3 rounded-xl font-bold hover:bg-blue-50 transition flex items-center gap-3 justify-center">
-                                <i class="fas fa-file-pdf"></i> Full Research Report
-                            </a>
-                            <a href="#" class="bg-primary/20 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition flex items-center gap-3 justify-center">
-                                <i class="fas fa-clipboard-list"></i> Research Questionnaire
-                            </a>
-                        </div>
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold mb-2">2,500+</div>
+                    <p class="text-blue-100">Active Sellers</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">15,000+</div>
+                    <p class="text-blue-100">Products Listed</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">50,000+</div>
+                    <p class="text-blue-100">Happy Customers</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold mb-2">KES 500M+</div>
+                    <p class="text-blue-100">Total Sales</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">About Meru Marketplace</h2>
+                <p class="text-slate-600 text-lg mb-8">
+                    We're building the most trusted e-commerce platform for Meru County. Our mission is to empower local businesses and provide customers with quality products at fair prices.
+                </p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-slate-50 rounded-xl">
+                        <div class="text-4xl text-primary mb-4"><i class="fas fa-handshake"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Community Focused</h3>
+                        <p class="text-slate-600">Supporting local entrepreneurs and businesses</p>
                     </div>
-                    <div class="hidden md:block">
-                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-                            <div class="flex items-center gap-4 mb-6">
-                                <i class="fas fa-info-circle text-blue-300"></i>
-                                <span class="font-semibold uppercase tracking-widest text-sm">Report Details</span>
-                            </div>
-                            <ul class="space-y-4 text-blue-100">
-                                <li class="flex justify-between"><span>Format</span> <span class="font-mono">PDF / DOCX</span></li>
-                                <li class="flex justify-between"><span>File Size</span> <span class="font-mono">4.2 MB</span></li>
-                                <li class="flex justify-between"><span>Pages</span> <span class="font-mono">68 Pages</span></li>
-                                <li class="flex justify-between"><span>Language</span> <span class="font-mono">English</span></li>
-                            </ul>
-                        </div>
+                    <div class="p-6 bg-slate-50 rounded-xl">
+                        <div class="text-4xl text-primary mb-4"><i class="fas fa-lock"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Secure & Safe</h3>
+                        <p class="text-slate-600">Protecting both buyers and sellers always</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 rounded-xl">
+                        <div class="text-4xl text-primary mb-4"><i class="fas fa-rocket"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Fast & Easy</h3>
+                        <p class="text-slate-600">Simple platform to buy and sell</p>
                     </div>
                 </div>
-                <!-- Abstract Design Elements -->
-                <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-blue-900/30 rounded-full blur-3xl"></div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
+    <footer class="bg-slate-900 text-white pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-2">
                     <div class="flex items-center gap-2 mb-6">
                         <div class="bg-primary p-2 rounded-lg">
-                            <i class="fas fa-shield-alt text-white"></i>
+                            <i class="fas fa-store text-white"></i>
                         </div>
-                        <span class="font-bold text-xl tracking-tight">SecurityResearch.ke</span>
+                        <span class="font-bold text-xl tracking-tight">Meru Marketplace</span>
                     </div>
-                    <p class="text-slate-500 max-w-sm">
-                        Advancing cybersecurity awareness and infrastructure for the e-commerce sector in Meru County, Kenya.
+                    <p class="text-slate-400 max-w-sm">
+                        Your trusted platform for buying and selling quality products locally in Meru County.
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Navigation</h4>
-                    <ul class="space-y-4 text-slate-600 text-sm">
-                        <li><a href="#abstract" class="hover:text-primary transition">Abstract</a></li>
-                        <li><a href="#methodology" class="hover:text-primary transition">Methodology</a></li>
-                        <li><a href="#findings" class="hover:text-primary transition">Findings</a></li>
-                        <li><a href="#recommendations" class="hover:text-primary transition">Recommendations</a></li>
+                    <h4 class="font-bold mb-6 uppercase text-xs tracking-widest">Quick Links</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm">
+                        <li><a href="#products" class="hover:text-white transition">Shop</a></li>
+                        <li><a href="#sell" class="hover:text-white transition">Sell</a></li>
+                        <li><a href="#about" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Contact</h4>
-                    <ul class="space-y-4 text-slate-600 text-sm">
-                        <li class="flex items-center gap-3"><i class="fas fa-envelope text-primary"></i> research@meru.ac.ke</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-primary"></i> Meru, Kenya</li>
+                    <h4 class="font-bold mb-6 uppercase text-xs tracking-widest">Contact</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm">
+                        <li class="flex items-center gap-3"><i class="fas fa-envelope"></i> hello@merumarketplace.ke</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-phone"></i> +254 700 123 456</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt"></i> Meru, Kenya</li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-slate-200 pt-8 flex flex-col md:row justify-between items-center gap-4">
-                <p class="text-slate-500 text-sm">© 2023 Research Project. All rights reserved.</p>
+            <div class="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-400 text-sm">© 2024 Meru Marketplace. All rights reserved.</p>
                 <div class="flex gap-6">
-                    <a href="#" class="text-slate-400 hover:text-primary transition"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-slate-400 hover:text-primary transition"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="text-slate-400 hover:text-primary transition"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-white transition"><i class="fab fa-twitter text-xl"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-white transition"><i class="fab fa-instagram text-xl"></i></a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Login</h2>
+                <button onclick="closeModal('loginModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-medium mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="your@email.com">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-slate-700 font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition mb-4">
+                    Login
+                </button>
+            </form>
+
+            <p class="text-center text-slate-600 mb-4">Don't have an account? <button onclick="switchModal('loginModal', 'signupModal')" class="text-primary font-bold hover:underline">Sign Up</button></p>
+
+            <div class="border-t border-slate-200 pt-4">
+                <button class="w-full bg-slate-100 text-slate-900 py-2 rounded-lg font-medium hover:bg-slate-200 transition mb-2 flex items-center justify-center gap-2">
+                    <i class="fab fa-google"></i> Login with Google
+                </button>
+                <button class="w-full bg-slate-100 text-slate-900 py-2 rounded-lg font-medium hover:bg-slate-200 transition flex items-center justify-center gap-2">
+                    <i class="fab fa-facebook"></i> Login with Facebook
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIGNUP MODAL -->
+    <div id="signupModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Create Account</h2>
+                <button onclick="closeModal('signupModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSignup(event)">
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-medium mb-2">Full Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="John Doe">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-medium mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="your@email.com">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="+254 700 123 456">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-slate-700 font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••">
+                </div>
+
+                <div class="mb-6">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" required class="w-4 h-4">
+                        <span class="text-sm text-slate-600">I agree to Terms & Conditions</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition mb-4">
+                    Create Account
+                </button>
+            </form>
+
+            <p class="text-center text-slate-600">Already have an account? <button onclick="switchModal('signupModal', 'loginModal')" class="text-primary font-bold hover:underline">Login</button></p>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script>
@@ -381,52 +438,42 @@
             });
         });
 
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1
-        };
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
 
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                }
-            });
-        }, observerOptions);
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
 
-        document.querySelectorAll('section').forEach(section => {
-            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
-            revealObserver.observe(section);
+        function switchModal(closeId, openId) {
+            closeModal(closeId);
+            openModal(openId);
+        }
+
+        // Handle Login
+        function handleLogin(event) {
+            event.preventDefault();
+            alert('Welcome back! You have been logged in successfully.');
+            closeModal('loginModal');
+        }
+
+        // Handle Signup
+        function handleSignup(event) {
+            event.preventDefault();
+            alert('Account created successfully! Welcome to Meru Marketplace.');
+            closeModal('signupModal');
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (event) => {
+            const loginModal = document.getElementById('loginModal');
+            const signupModal = document.getElementById('signupModal');
+            
+            if (event.target === loginModal) closeModal('loginModal');
+            if (event.target === signupModal) closeModal('signupModal');
         });
-
-        // Specific animation for progress bars and circles
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const bars = entry.target.querySelectorAll('.bg-accent, .bg-red-500');
-                    bars.forEach(bar => {
-                        const targetWidth = bar.style.width;
-                        bar.style.width = '0';
-                        setTimeout(() => {
-                            bar.style.width = targetWidth;
-                        }, 100);
-                    });
-
-                    const circle = entry.target.querySelector('circle.text-accent');
-                    if (circle) {
-                        circle.style.strokeDashoffset = '440';
-                        setTimeout(() => {
-                            circle.style.transition = 'stroke-dashoffset 1.5s ease-out';
-                            circle.style.strokeDashoffset = '48';
-                        }, 100);
-                    }
-                }
-            });
-        }, { threshold: 0.5 });
-
-        const findingsSection = document.getElementById('findings');
-        if (findingsSection) statsObserver.observe(findingsSection);
     </script>
 </body>
 </html>
