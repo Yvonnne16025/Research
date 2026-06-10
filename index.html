@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meru Marketplace - Buy & Sell</title>
+    <title>Meru Mall - Online Shopping Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -11,9 +11,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1e40af',
-                        secondary: '#0f172a',
-                        accent: '#3b82f6',
+                        primary: '#f7941d',
+                        secondary: '#212121',
+                        accent: '#0066ff',
                     }
                 }
             }
@@ -22,6 +22,7 @@
     <style>
         .product-card:hover {
             transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
         .fade-in {
@@ -31,454 +32,502 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .badge-sale {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+        .carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        .carousel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .carousel::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans leading-relaxed">
+<body class="bg-gray-100 text-gray-900 font-sans leading-relaxed">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center gap-2">
+    <!-- Top Notification Bar -->
+    <div class="bg-secondary text-white py-2 text-center text-sm">
+        <i class="fas fa-truck mr-2"></i> Free Delivery on Orders Above KES 3,000 | <i class="fas fa-shield-alt mr-2"></i> 100% Secure Shopping
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
                     <div class="bg-primary p-2 rounded-lg">
-                        <i class="fas fa-store text-white"></i>
+                        <i class="fas fa-shopping-bag text-white text-xl"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-tight hidden md:block">Meru Marketplace</span>
+                    <span class="font-bold text-2xl text-secondary hidden md:block">Meru Mall</span>
                 </div>
 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#home" class="text-slate-600 hover:text-primary font-medium transition">Home</a>
-                    <a href="#products" class="text-slate-600 hover:text-primary font-medium transition">Shop</a>
-                    <a href="#sell" id="sellNavLink" class="text-slate-600 hover:text-primary font-medium transition hidden">My Store</a>
-                    <div id="userMenu" class="hidden flex items-center gap-4">
-                        <span id="userGreeting" class="text-primary font-bold"></span>
-                        <button onclick="openModal('profileModal')" class="bg-slate-200 text-slate-900 px-4 py-2 rounded-lg hover:bg-slate-300 transition">
-                            <i class="fas fa-user mr-2"></i>Profile
-                        </button>
-                        <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                            Logout
-                        </button>
-                    </div>
-                    <button id="loginNavBtn" onclick="openModal('loginModal')" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center gap-4">
-                    <button id="mobileUserBtn" onclick="openModal('profileModal')" class="text-primary hover:text-blue-700 font-bold hidden">
-                        <i class="fas fa-user text-xl"></i>
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 mx-8">
+                    <input type="text" id="searchInput" placeholder="Search products, brands, categories..." class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none">
+                    <button class="bg-primary text-white px-6 py-2 rounded-r-lg hover:bg-orange-600 transition">
+                        <i class="fas fa-search"></i>
                     </button>
-                    <button id="mobile-menu-button" class="text-slate-600 hover:text-primary focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
+                </div>
+
+                <!-- Right Menu -->
+                <div class="flex items-center gap-4">
+                    <div class="text-center cursor-pointer hover:text-primary" onclick="openModal('loginModal')">
+                        <i class="fas fa-user text-2xl"></i>
+                        <p class="text-xs" id="userLoginText">Login</p>
+                    </div>
+                    <div class="text-center cursor-pointer hover:text-primary" onclick="viewCart()">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        <span class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs absolute" id="cartCount">0</span>
+                        <p class="text-xs">Cart</p>
+                    </div>
+                    <div class="text-center cursor-pointer hover:text-primary" onclick="viewWishlist()">
+                        <i class="fas fa-heart text-2xl"></i>
+                        <span class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs absolute" id="wishCount">0</span>
+                        <p class="text-xs">Wishlist</p>
+                    </div>
+                    <button id="mobile-menu-button" class="md:hidden text-2xl">
+                        <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Home</a>
-                <a href="#products" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md">Shop</a>
-                <a href="#sell" id="sellNavLinkMobile" class="block px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-md hidden">My Store</a>
-                <button id="mobileLogoutBtn" onclick="logout()" class="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md font-bold hidden">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </button>
+            <!-- Categories Bar -->
+            <div class="border-t border-gray-200 overflow-x-auto">
+                <div class="flex gap-8 py-3 px-0 whitespace-nowrap">
+                    <a href="#" class="text-sm font-medium hover:text-primary">Electronics</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Fashion</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Home & Garden</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Beauty</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Books</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Sports</a>
+                    <a href="#" class="text-sm font-medium hover:text-primary">Groceries</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header id="home" class="pt-32 pb-20 bg-gradient-to-br from-slate-900 via-slate-800 to-primary text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-blue-500/30 uppercase tracking-wider">Welcome to</span>
-                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                    Meru Marketplace
-                </h1>
-                <p class="text-xl text-slate-300 mb-10 leading-relaxed">
-                    Your trusted platform to buy and sell quality products locally. Support local businesses and find amazing deals!
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#products" class="bg-white text-slate-900 px-8 py-3 rounded-lg font-bold hover:bg-slate-100 transition flex items-center justify-center gap-2">
-                        Start Shopping <i class="fas fa-shopping-bag"></i>
-                    </a>
-                    <a href="#sell" class="border border-white/30 bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-lg font-bold hover:bg-white/20 transition flex items-center justify-center gap-2">
-                        Start Selling <i class="fas fa-store"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Mobile Search -->
+    <div class="md:hidden bg-white p-2 shadow-sm">
+        <input type="text" placeholder="Search..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+    </div>
 
-    <!-- Featured Products Section -->
-    <section id="products" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Featured Products</h2>
-                <p class="text-slate-600 text-lg">Discover amazing products from local sellers in Meru</p>
-            </div>
-
-            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Default Products -->
-                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 h-48 flex items-center justify-center text-white text-4xl">
-                        <i class="fas fa-apple-alt"></i>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Fresh Fruits</h3>
-                        <p class="text-slate-600 text-sm mb-1">Seller: Local Farm</p>
-                        <p class="text-slate-600 text-sm mb-3">Organic farm-fresh fruits</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-primary">KES 500</span>
-                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.8</span>
-                        </div>
-                        <button onclick="handleProductAction('Fresh Fruits', 500, 'buyer')" id="actionBtn" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="bg-gradient-to-br from-green-400 to-green-600 h-48 flex items-center justify-center text-white text-4xl">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Vegetables</h3>
-                        <p class="text-slate-600 text-sm mb-1">Seller: Green Valley</p>
-                        <p class="text-slate-600 text-sm mb-3">Fresh vegetables daily</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-primary">KES 300</span>
-                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.7</span>
-                        </div>
-                        <button onclick="handleProductAction('Vegetables', 300, 'buyer')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="bg-gradient-to-br from-orange-400 to-orange-600 h-48 flex items-center justify-center text-white text-4xl">
-                        <i class="fas fa-bread-slice"></i>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Baked Goods</h3>
-                        <p class="text-slate-600 text-sm mb-1">Seller: Sweet Bakery</p>
-                        <p class="text-slate-600 text-sm mb-3">Homemade bakery items</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-primary">KES 200</span>
-                            <span class="text-yellow-500"><i class="fas fa-star"></i> 4.9</span>
-                        </div>
-                        <button onclick="handleProductAction('Baked Goods', 200, 'buyer')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="bg-gradient-to-br from-purple-400 to-purple-600 h-48 flex items-center justify-center text-white text-4xl">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Handcrafts</h3>
-                        <p class="text-slate-600 text-sm mb-1">Seller: Artisan Hub</p>
-                        <p class="text-slate-600 text-sm mb-3">Local artisan products</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-primary">KES 1,500</span>
-                            <span class="text-yellow-500"><i class="fas fa-star"></i> 5.0</span>
-                        </div>
-                        <button onclick="handleProductAction('Handcrafts', 1500, 'buyer')" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seller Dashboard -->
-    <section id="sell" class="py-24 bg-slate-50 hidden" id="sellerDashboard">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Store</h2>
-                <button onclick="openModal('addProductModal')" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition">
-                    <i class="fas fa-plus mr-2"></i>Add New Product
+    <!-- Banner Carousel -->
+    <div class="bg-white shadow-sm mt-4">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bg-gradient-to-r from-primary to-orange-500 rounded-lg p-8 text-white mb-8 text-center">
+                <h1 class="text-4xl font-bold mb-4">Mega Sale - Up to 70% OFF!</h1>
+                <p class="text-xl mb-6">Limited time offer. Shop now before stock ends.</p>
+                <button class="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                    Shop Now
                 </button>
             </div>
+        </div>
+    </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Seller Products Display -->
-                <div id="sellerProductsList" class="col-span-full">
-                    <p class="text-slate-600 text-center py-8">No products yet. Click "Add New Product" to get started!</p>
-                </div>
+    <!-- Flash Deals Section -->
+    <section class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-fire text-red-500"></i> Flash Deals
+                </h2>
+                <a href="#" class="text-primary font-bold">View All</a>
             </div>
+            <div class="carousel flex gap-4">
+                <div class="product-card flex-shrink-0 w-48 bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="relative bg-gray-200 h-48 flex items-center justify-center">
+                        <i class="fas fa-mobile-alt text-4xl text-gray-400"></i>
+                        <span class="badge-sale">-50%</span>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm line-clamp-2">Smartphone Pro Max</h3>
+                        <div class="my-2">
+                            <span class="text-red-500 font-bold text-lg">KES 12,999</span>
+                            <span class="line-through text-gray-400 text-sm ml-2">KES 25,999</span>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs">(234 reviews)</span>
+                        </div>
+                        <button onclick="addToCart({name: 'Smartphone Pro Max', price: 12999, image: 'mobile'})" class="w-full bg-primary text-white py-2 rounded text-sm font-bold hover:bg-orange-600">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
 
-            <!-- Messages Section -->
-            <div class="mt-16 bg-white rounded-xl shadow-lg p-8">
-                <h3 class="text-2xl font-bold mb-6">Messages from Customers</h3>
-                <div id="messagesList" class="space-y-4">
-                    <p class="text-slate-600 text-center">No messages yet</p>
+                <div class="product-card flex-shrink-0 w-48 bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="relative bg-gray-200 h-48 flex items-center justify-center">
+                        <i class="fas fa-laptop text-4xl text-gray-400"></i>
+                        <span class="badge-sale">-40%</span>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm line-clamp-2">Laptop i7 16GB RAM</h3>
+                        <div class="my-2">
+                            <span class="text-red-500 font-bold text-lg">KES 35,999</span>
+                            <span class="line-through text-gray-400 text-sm ml-2">KES 59,999</span>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs">(456 reviews)</span>
+                        </div>
+                        <button onclick="addToCart({name: 'Laptop i7', price: 35999, image: 'laptop'})" class="w-full bg-primary text-white py-2 rounded text-sm font-bold hover:bg-orange-600">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card flex-shrink-0 w-48 bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="relative bg-gray-200 h-48 flex items-center justify-center">
+                        <i class="fas fa-headphones text-4xl text-gray-400"></i>
+                        <span class="badge-sale">-35%</span>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm line-clamp-2">Wireless Headphones</h3>
+                        <div class="my-2">
+                            <span class="text-red-500 font-bold text-lg">KES 3,499</span>
+                            <span class="line-through text-gray-400 text-sm ml-2">KES 5,399</span>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs">(789 reviews)</span>
+                        </div>
+                        <button onclick="addToCart({name: 'Wireless Headphones', price: 3499, image: 'headphones'})" class="w-full bg-primary text-white py-2 rounded text-sm font-bold hover:bg-orange-600">
+                            Add to Cart
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">About Meru Marketplace</h2>
-                <p class="text-slate-600 text-lg mb-8">
-                    We're building the most trusted e-commerce platform for Meru County. Our mission is to empower local businesses and provide customers with quality products at fair prices.
-                </p>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="p-6 bg-slate-50 rounded-xl">
-                        <div class="text-4xl text-primary mb-4"><i class="fas fa-handshake"></i></div>
-                        <h3 class="font-bold text-lg mb-2">Community Focused</h3>
-                        <p class="text-slate-600">Supporting local entrepreneurs and businesses</p>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-xl">
-                        <div class="text-4xl text-primary mb-4"><i class="fas fa-lock"></i></div>
-                        <h3 class="font-bold text-lg mb-2">Secure & Safe</h3>
-                        <p class="text-slate-600">Protecting both buyers and sellers always</p>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-xl">
-                        <div class="text-4xl text-primary mb-4"><i class="fas fa-rocket"></i></div>
-                        <h3 class="font-bold text-lg mb-2">Fast & Easy</h3>
-                        <p class="text-slate-600">Simple platform to buy and sell</p>
-                    </div>
+    <!-- Categories Grid -->
+    <section class="max-w-7xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Shop by Category</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-mobile-alt text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Electronics</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-shirt text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Fashion</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-home text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Home</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-heartbeat text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Beauty</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-book text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Books</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition">
+                <i class="fas fa-dumbbell text-4xl text-primary mb-2"></i>
+                <p class="font-bold text-sm">Sports</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers Section -->
+    <section class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-6">Best Sellers</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="bestSellers">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sellers Section -->
+    <section class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-6">Become a Seller</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Start Your Business Today</h3>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>Reach millions of customers</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>Free store setup - no commission for first 100 sales</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>Marketing support and tools</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                            <span>Secure payment processing</span>
+                        </li>
+                    </ul>
+                    <button onclick="openModal('sellerSignup')" class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-orange-600 transition">
+                        Apply as Seller
+                    </button>
+                </div>
+                <div class="bg-gradient-to-br from-primary to-orange-500 rounded-lg p-8 text-white text-center">
+                    <i class="fas fa-chart-line text-6xl mb-4"></i>
+                    <h4 class="text-2xl font-bold mb-2">Grow Your Sales</h4>
+                    <p>Join thousands of successful sellers on Meru Mall</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="bg-primary p-2 rounded-lg">
-                            <i class="fas fa-store text-white"></i>
-                        </div>
-                        <span class="font-bold text-xl tracking-tight">Meru Marketplace</span>
+    <footer class="bg-secondary text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold mb-4">About Meru Mall</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary">About Us</a></li>
+                        <li><a href="#" class="hover:text-primary">Careers</a></li>
+                        <li><a href="#" class="hover:text-primary">Press</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Customer Service</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-primary">Help Center</a></li>
+                        <li><a href="#" class="hover:text-primary">Track Order</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Policies</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-primary">Return Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-primary"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-primary"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-primary"><i class="fab fa-instagram"></i></a>
                     </div>
-                    <p class="text-slate-400 max-w-sm">
-                        Your trusted platform for buying and selling quality products locally in Meru County.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-6 uppercase text-xs tracking-widest">Quick Links</h4>
-                    <ul class="space-y-4 text-slate-400 text-sm">
-                        <li><a href="#products" class="hover:text-white transition">Shop</a></li>
-                        <li><a href="#sell" class="hover:text-white transition">Sell</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-6 uppercase text-xs tracking-widest">Contact</h4>
-                    <ul class="space-y-4 text-slate-400 text-sm">
-                        <li class="flex items-center gap-3"><i class="fas fa-envelope"></i> hello@merumarketplace.ke</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-phone"></i> +254 700 123 456</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt"></i> Meru, Kenya</li>
-                    </ul>
                 </div>
             </div>
-            <div class="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-slate-400 text-sm">© 2024 Meru Marketplace. All rights reserved.</p>
+            <div class="border-t border-gray-700 pt-8 text-center text-sm">
+                <p>&copy; 2024 Meru Mall. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- LOGIN MODAL -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Login</h2>
-                <button onclick="closeModal('loginModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                <h2 class="text-2xl font-bold">Login / Sign Up</h2>
+                <button onclick="closeModal('loginModal')" class="text-gray-500 hover:text-gray-700 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <form onsubmit="handleLogin(event)">
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Email</label>
-                    <input type="email" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="your@email.com" id="loginEmail">
+                    <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="+254 700 123 456" id="loginPhone">
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-slate-700 font-medium mb-2">Password</label>
-                    <input type="password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••" id="loginPassword">
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••" id="loginPassword">
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition mb-4">
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition mb-4">
                     Login
                 </button>
             </form>
 
-            <p class="text-center text-slate-600 mb-4">Don't have an account? <button onclick="switchModal('loginModal', 'signupModal')" class="text-primary font-bold hover:underline">Sign Up</button></p>
+            <p class="text-center text-gray-600 mb-4">Don't have an account? <button onclick="switchModal('loginModal', 'signupModal')" class="text-primary font-bold hover:underline">Sign Up</button></p>
+
+            <div class="space-y-2">
+                <button class="w-full border border-gray-300 py-2 rounded-lg font-medium hover:bg-gray-50 transition">
+                    <i class="fab fa-google mr-2"></i> Continue with Google
+                </button>
+                <button class="w-full border border-gray-300 py-2 rounded-lg font-medium hover:bg-gray-50 transition">
+                    <i class="fab fa-apple mr-2"></i> Continue with Apple
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- SIGNUP MODAL -->
-    <div id="signupModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 max-h-96 overflow-y-auto">
+    <div id="signupModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 max-h-96 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">Create Account</h2>
-                <button onclick="closeModal('signupModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                <button onclick="closeModal('signupModal')" class="text-gray-500 hover:text-gray-700 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <form onsubmit="handleSignup(event)">
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Full Name</label>
-                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="John Doe" id="signupName">
+                    <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="John Doe" id="signupName">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Email</label>
-                    <input type="email" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="your@email.com" id="signupEmail">
+                    <label class="block text-gray-700 font-medium mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="john@example.com" id="signupEmail">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Phone Number</label>
-                    <input type="tel" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="+254 700 123 456" id="signupPhone">
+                    <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="+254 700 123 456" id="signupPhone">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Account Type</label>
-                    <select id="accountType" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary">
-                        <option value="buyer">Buyer - I want to buy products</option>
-                        <option value="seller">Seller - I want to sell products</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Password</label>
-                    <input type="password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••" id="signupPassword">
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="••••••••" id="signupPassword">
                 </div>
 
                 <div class="mb-6">
                     <label class="flex items-center gap-2">
                         <input type="checkbox" required class="w-4 h-4">
-                        <span class="text-sm text-slate-600">I agree to Terms & Conditions</span>
+                        <span class="text-sm text-gray-600">I agree to Terms & Privacy Policy</span>
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition mb-4">
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition">
                     Create Account
                 </button>
             </form>
 
-            <p class="text-center text-slate-600">Already have an account? <button onclick="switchModal('signupModal', 'loginModal')" class="text-primary font-bold hover:underline">Login</button></p>
+            <p class="text-center text-gray-600 mt-4">Already have an account? <button onclick="switchModal('signupModal', 'loginModal')" class="text-primary font-bold hover:underline">Login</button></p>
         </div>
     </div>
 
-    <!-- ADD PRODUCT MODAL (For Sellers) -->
-    <div id="addProductModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 max-h-96 overflow-y-auto">
+    <!-- SELLER SIGNUP MODAL -->
+    <div id="sellerSignup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 max-h-96 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Add Product</h2>
-                <button onclick="closeModal('addProductModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                <h2 class="text-2xl font-bold">Become a Seller</h2>
+                <button onclick="closeModal('sellerSignup')" class="text-gray-500 hover:text-gray-700 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <form onsubmit="handleAddProduct(event)">
+            <form onsubmit="handleSellerSignup(event)">
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Product Name</label>
-                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="e.g., Fresh Tomatoes" id="productName">
+                    <label class="block text-gray-700 font-medium mb-2">Store Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="My Store" id="storeName">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Price (KES)</label>
-                    <input type="number" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="e.g., 500" id="productPrice">
+                    <label class="block text-gray-700 font-medium mb-2">Business Email</label>
+                    <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="store@example.com" id="storeEmail">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Description</label>
-                    <textarea required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="Describe your product" id="productDesc"></textarea>
+                    <label class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <input type="tel" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" placeholder="+254 700 123 456" id="storePhone">
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-slate-700 font-medium mb-2">Category</label>
-                    <select id="productCategory" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary">
-                        <option>Fruits</option>
-                        <option>Vegetables</option>
-                        <option>Baked Goods</option>
-                        <option>Handcrafts</option>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Category</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary" id="storeCategory">
                         <option>Electronics</option>
-                        <option>Clothing</option>
+                        <option>Fashion</option>
+                        <option>Home & Garden</option>
+                        <option>Beauty</option>
+                        <option>Books</option>
                         <option>Other</option>
                     </select>
                 </div>
 
-                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-bold hover:bg-green-700 transition">
-                    <i class="fas fa-plus mr-2"></i>Add Product
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition">
+                    Apply Now
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
-    <div id="profileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+    <!-- CART MODAL -->
+    <div id="cartModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 max-h-96 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Your Profile</h2>
-                <button onclick="closeModal('profileModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                <h2 class="text-2xl font-bold">Shopping Cart</h2>
+                <button onclick="closeModal('cartModal')" class="text-gray-500 hover:text-gray-700 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <div class="space-y-4">
-                <div class="bg-slate-100 p-4 rounded-lg">
-                    <p class="text-slate-600 text-sm">Name</p>
-                    <p id="profileName" class="font-bold text-lg">-</p>
+            <div id="cartItems"></div>
+            
+            <div class="border-t pt-4 mt-4">
+                <div class="flex justify-between text-lg font-bold mb-4">
+                    <span>Total:</span>
+                    <span id="cartTotal" class="text-primary">KES 0</span>
                 </div>
-                <div class="bg-slate-100 p-4 rounded-lg">
-                    <p class="text-slate-600 text-sm">Email</p>
-                    <p id="profileEmail" class="font-bold text-lg">-</p>
-                </div>
-                <div class="bg-slate-100 p-4 rounded-lg">
-                    <p class="text-slate-600 text-sm">Account Type</p>
-                    <p id="profileType" class="font-bold text-lg text-primary">-</p>
-                </div>
-                <div class="bg-slate-100 p-4 rounded-lg">
-                    <p class="text-slate-600 text-sm">Phone</p>
-                    <p id="profilePhone" class="font-bold text-lg">-</p>
-                </div>
+                <button onclick="handleCheckout()" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition mb-2">
+                    Proceed to Checkout
+                </button>
+                <button onclick="closeModal('cartModal')" class="w-full border border-gray-300 py-3 rounded-lg font-bold hover:bg-gray-50 transition">
+                    Continue Shopping
+                </button>
             </div>
-
-            <button onclick="closeModal('profileModal')" class="w-full mt-6 bg-slate-200 text-slate-900 py-2 rounded-lg font-bold hover:bg-slate-300 transition">
-                Close
-            </button>
         </div>
     </div>
 
-    <!-- MESSAGE MODAL -->
-    <div id="messageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 fade-in">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 max-h-96 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Message Seller</h2>
-                <button onclick="closeModal('messageModal')" class="text-slate-500 hover:text-slate-700 text-2xl">
+                <h2 class="text-2xl font-bold">Checkout</h2>
+                <button onclick="closeModal('checkoutModal')" class="text-gray-500 hover:text-gray-700 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <form onsubmit="handleSendMessage(event)">
-                <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Product</label>
-                    <input type="text" disabled id="messageProduct" class="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-100">
+            <form onsubmit="handlePayment(event)">
+                <div class="mb-6">
+                    <h3 class="font-bold mb-3">Delivery Address</h3>
+                    <input type="text" required placeholder="Street Address" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2">
+                    <input type="text" required placeholder="City/Town" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2">
+                    <input type="text" required placeholder="Postal Code" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-slate-700 font-medium mb-2">Your Message</label>
-                    <textarea required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary" placeholder="Ask about the product, negotiate price, etc." id="messageText"></textarea>
+                <div class="mb-6">
+                    <h3 class="font-bold mb-3">Payment Method</h3>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option>M-Pesa</option>
+                        <option>Airtel Money</option>
+                        <option>Bank Transfer</option>
+                        <option>Credit Card</option>
+                    </select>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition">
-                    <i class="fas fa-paper-plane mr-2"></i>Send Message
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition">
+                    Complete Payment
                 </button>
             </form>
         </div>
@@ -486,52 +535,165 @@
 
     <!-- Scripts -->
     <script>
-        // ===== USER & STATE MANAGEMENT =====
         let currentUser = null;
-        let sellerProducts = [];
-        let customerMessages = [];
+        let cart = [];
+        let wishlist = [];
+
+        // Product catalog
+        const products = [
+            { id: 1, name: 'Smartphone Pro', price: 15999, category: 'Electronics', rating: 4.5, reviews: 234 },
+            { id: 2, name: 'Wireless Earbuds', price: 2999, category: 'Electronics', rating: 4.7, reviews: 567 },
+            { id: 3, name: 'USB-C Cable', price: 599, category: 'Electronics', rating: 4.6, reviews: 890 },
+            { id: 4, name: 'Phone Case', price: 799, category: 'Accessories', rating: 4.4, reviews: 345 },
+            { id: 5, name: 'Screen Protector', price: 399, category: 'Accessories', rating: 4.8, reviews: 456 },
+            { id: 6, name: 'Power Bank', price: 1999, category: 'Electronics', rating: 4.6, reviews: 678 },
+            { id: 7, name: 'LED Lamp', price: 1299, category: 'Home', rating: 4.5, reviews: 234 },
+            { id: 8, name: 'Coffee Maker', price: 3499, category: 'Home', rating: 4.7, reviews: 345 }
+        ];
+
+        function displayBestSellers() {
+            const container = document.getElementById('bestSellers');
+            container.innerHTML = products.map(product => `
+                <div class="product-card bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
+                    <div class="bg-gray-200 h-40 flex items-center justify-center">
+                        <i class="fas fa-box text-4xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-sm line-clamp-2">${product.name}</h3>
+                        <div class="my-2">
+                            <span class="text-red-500 font-bold">KES ${product.price}</span>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <div class="flex text-yellow-400 text-xs">
+                                ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating))}
+                            </div>
+                            <span class="text-xs text-gray-500">(${product.reviews})</span>
+                        </div>
+                        <button onclick="addToCart({name: '${product.name}', price: ${product.price}, id: ${product.id}})" class="w-full bg-primary text-white py-2 rounded text-sm font-bold hover:bg-orange-600">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(product) {
+            if (!currentUser) {
+                alert('Please login first');
+                openModal('loginModal');
+                return;
+            }
+            
+            cart.push(product);
+            updateCart();
+            alert('Added to cart!');
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').textContent = cart.length;
+            
+            const cartItems = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center text-gray-500 py-8">Your cart is empty</p>';
+                document.getElementById('cartTotal').textContent = 'KES 0';
+            } else {
+                let total = 0;
+                cartItems.innerHTML = cart.map((item, index) => {
+                    total += item.price;
+                    return `
+                        <div class="flex justify-between items-center pb-3 border-b">
+                            <div>
+                                <p class="font-bold">${item.name}</p>
+                                <p class="text-sm text-gray-500">KES ${item.price}</p>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('cartTotal').textContent = 'KES ' + total;
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function viewCart() {
+            if (!currentUser) {
+                alert('Please login first');
+                openModal('loginModal');
+                return;
+            }
+            openModal('cartModal');
+        }
+
+        function viewWishlist() {
+            if (!currentUser) {
+                alert('Please login first');
+                openModal('loginModal');
+                return;
+            }
+            alert(`Wishlist (${wishlist.length} items)`);
+        }
+
+        function handleCheckout() {
+            if (cart.length === 0) {
+                alert('Cart is empty');
+                return;
+            }
+            closeModal('cartModal');
+            openModal('checkoutModal');
+        }
+
+        function handlePayment(event) {
+            event.preventDefault();
+            alert('Order placed successfully! You will receive confirmation via SMS.');
+            cart = [];
+            updateCart();
+            closeModal('checkoutModal');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const phone = document.getElementById('loginPhone').value;
+            currentUser = { phone, type: 'buyer' };
+            alert('Logged in successfully!');
+            updateUI();
+            closeModal('loginModal');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const phone = document.getElementById('signupPhone').value;
+            currentUser = { name, phone, type: 'buyer' };
+            alert('Account created successfully!');
+            updateUI();
+            closeModal('signupModal');
+        }
+
+        function handleSellerSignup(event) {
+            event.preventDefault();
+            alert('Application submitted! We will contact you soon.');
+            closeModal('sellerSignup');
+        }
 
         function updateUI() {
-            const isLoggedIn = !!currentUser;
-            const isSeller = currentUser?.type === 'seller';
-
-            // Update navbar
-            document.getElementById('loginNavBtn').classList.toggle('hidden', isLoggedIn);
-            document.getElementById('userMenu').classList.toggle('hidden', !isLoggedIn);
-            document.getElementById('mobileUserBtn').classList.toggle('hidden', !isLoggedIn);
-            document.getElementById('mobileLogoutBtn').classList.toggle('hidden', !isLoggedIn);
-            document.getElementById('sellNavLink').classList.toggle('hidden', !isSeller);
-            document.getElementById('sellNavLinkMobile').classList.toggle('hidden', !isSeller);
-
-            if (isLoggedIn) {
-                document.getElementById('userGreeting').textContent = `Welcome, ${currentUser.name}!`;
-                // Update profile modal
-                document.getElementById('profileName').textContent = currentUser.name;
-                document.getElementById('profileEmail').textContent = currentUser.email;
-                document.getElementById('profilePhone').textContent = currentUser.phone;
-                document.getElementById('profileType').textContent = currentUser.type === 'seller' ? 'Seller' : 'Buyer';
+            document.getElementById('userLoginText').textContent = currentUser ? 'Account' : 'Login';
+            if (currentUser) {
+                document.querySelector('[onclick="openModal(\'loginModal\')"]').textContent = `<i class="fas fa-user text-2xl"></i><p class="text-xs">${currentUser.name || 'Account'}</p>`;
             }
-
-            // Show/hide seller dashboard
-            document.getElementById('sellerDashboard').classList.toggle('hidden', !isSeller);
-            
-            // Update product buttons
-            updateProductButtons();
         }
 
-        function updateProductButtons() {
-            const isSeller = currentUser?.type === 'seller';
-            const buttons = document.querySelectorAll('[id^="actionBtn"]');
-            // Updated in product rendering
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        // ===== MODAL FUNCTIONS =====
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
         }
 
         function switchModal(closeId, openId) {
@@ -539,219 +701,18 @@
             openModal(openId);
         }
 
-        // ===== AUTHENTICATION =====
-        function handleLogin(event) {
-            event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // Retrieve user from localStorage
-            const savedUser = localStorage.getItem('meruUser_' + email);
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                alert(`Welcome back, ${currentUser.name}!`);
-                updateUI();
-                closeModal('loginModal');
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPassword').value = '';
-            } else {
-                alert('User not found. Please sign up first.');
-            }
-        }
-
-        function handleSignup(event) {
-            event.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const phone = document.getElementById('signupPhone').value;
-            const type = document.getElementById('accountType').value;
-
-            currentUser = {
-                name,
-                email,
-                phone,
-                type,
-                joinDate: new Date().toLocaleDateString()
-            };
-
-            // Save to localStorage
-            localStorage.setItem('meruUser_' + email, JSON.stringify(currentUser));
-
-            alert(`Account created successfully! Welcome ${type === 'seller' ? 'Seller' : 'Buyer'} ${name}!`);
-            updateUI();
-            closeModal('signupModal');
-
-            // Reset form
-            document.getElementById('signupName').value = '';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPhone').value = '';
-            document.getElementById('signupPassword').value = '';
-        }
-
-        function logout() {
-            currentUser = null;
-            sellerProducts = [];
-            alert('You have been logged out.');
-            updateUI();
-            closeModal('profileModal');
-            document.getElementById('mobile-menu').classList.add('hidden');
-        }
-
-        // ===== PRODUCT MANAGEMENT =====
-        function handleAddProduct(event) {
-            event.preventDefault();
-            if (!currentUser || currentUser.type !== 'seller') {
-                alert('Only sellers can add products!');
-                return;
-            }
-
-            const product = {
-                id: Date.now(),
-                name: document.getElementById('productName').value,
-                price: parseInt(document.getElementById('productPrice').value),
-                description: document.getElementById('productDesc').value,
-                category: document.getElementById('productCategory').value,
-                seller: currentUser.name,
-                rating: 5.0,
-                messages: []
-            };
-
-            sellerProducts.push(product);
-            alert(`Product "${product.name}" added successfully!`);
-            
-            // Save to localStorage
-            localStorage.setItem('sellerProducts_' + currentUser.email, JSON.stringify(sellerProducts));
-            
-            closeModal('addProductModal');
-            document.getElementById('productName').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productDesc').value = '';
-            
-            displaySellerProducts();
-        }
-
-        function displaySellerProducts() {
-            if (!currentUser || currentUser.type !== 'seller') return;
-
-            const list = document.getElementById('sellerProductsList');
-            const products = JSON.parse(localStorage.getItem('sellerProducts_' + currentUser.email)) || [];
-            sellerProducts = products;
-
-            if (products.length === 0) {
-                list.innerHTML = '<p class="text-slate-600 text-center py-8 col-span-full">No products yet. Click "Add New Product" to get started!</p>';
-                return;
-            }
-
-            list.innerHTML = products.map(product => `
-                <div class="product-card bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div class="bg-gradient-to-br from-indigo-400 to-indigo-600 h-48 flex items-center justify-center text-white text-4xl">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">${product.name}</h3>
-                        <p class="text-slate-600 text-sm mb-3">${product.description}</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-primary">KES ${product.price}</span>
-                            <span class="text-yellow-500"><i class="fas fa-star"></i> ${product.rating}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="editProduct(${product.id})" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                                <i class="fas fa-edit mr-1"></i>Edit
-                            </button>
-                            <button onclick="deleteProduct(${product.id})" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-medium">
-                                <i class="fas fa-trash mr-1"></i>Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function editProduct(productId) {
-            alert('Edit feature coming soon!');
-        }
-
-        function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                sellerProducts = sellerProducts.filter(p => p.id !== productId);
-                localStorage.setItem('sellerProducts_' + currentUser.email, JSON.stringify(sellerProducts));
-                displaySellerProducts();
-                alert('Product deleted!');
-            }
-        }
-
-        // ===== BUYER ACTIONS =====
-        function handleProductAction(productName, price, type) {
-            if (!currentUser) {
-                alert('Please login first!');
-                openModal('loginModal');
-                return;
-            }
-
-            if (currentUser.type === 'seller') {
-                alert('You are logged in as a seller. Please contact the seller directly about this product.');
-                return;
-            }
-
-            openModal('messageModal');
-            document.getElementById('messageProduct').value = productName;
-        }
-
-        function handleSendMessage(event) {
-            event.preventDefault();
-            const productName = document.getElementById('messageProduct').value;
-            const message = document.getElementById('messageText').value;
-
-            const newMessage = {
-                from: currentUser.name,
-                fromEmail: currentUser.email,
-                product: productName,
-                message: message,
-                date: new Date().toLocaleString()
-            };
-
-            // Save message
-            customerMessages.push(newMessage);
-            localStorage.setItem('messages_' + productName, JSON.stringify(customerMessages));
-
-            alert(`Message sent to seller! They will respond soon.`);
-            closeModal('messageModal');
-            document.getElementById('messageText').value = '';
-        }
-
-        // ===== MOBILE MENU =====
-        const btn = document.getElementById('mobile-menu-button');
-        const menu = document.getElementById('mobile-menu');
-
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-
-        const menuLinks = menu.querySelectorAll('a');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.add('hidden');
-            });
-        });
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (event) => {
-            const loginModal = document.getElementById('loginModal');
-            const signupModal = document.getElementById('signupModal');
-            const addProductModal = document.getElementById('addProductModal');
-            const profileModal = document.getElementById('profileModal');
-            const messageModal = document.getElementById('messageModal');
-            
-            if (event.target === loginModal) closeModal('loginModal');
-            if (event.target === signupModal) closeModal('signupModal');
-            if (event.target === addProductModal) closeModal('addProductModal');
-            if (event.target === profileModal) closeModal('profileModal');
-            if (event.target === messageModal) closeModal('messageModal');
-        });
-
-        // Initialize on page load
+        // Initialize
         window.addEventListener('load', () => {
-            updateUI();
+            displayBestSellers();
+            updateCart();
+        });
+
+        // Close modals on outside click
+        window.addEventListener('click', (e) => {
+            const modals = document.querySelectorAll('[id$="Modal"]');
+            modals.forEach(modal => {
+                if (e.target === modal) closeModal(modal.id);
+            });
         });
     </script>
 </body>
